@@ -12,8 +12,9 @@ const orderSchema = z.object({
   shippingFee: z.number().default(0),
   items: z.array(z.object({
     productId: z.string().min(1),
+    variantId: z.string().optional(), // Added variantId
     quantity: z.number().min(1),
-    price: z.number().min(0),
+    price: z.number().optional(), // Now ignored in favor of DB price
   })).min(1),
 })
 
@@ -23,12 +24,30 @@ export async function POST(req: Request) {
     const body = await req.json()
     const { name, phone, address, items, paymentMethod, shippingFee } = orderSchema.parse(body)
 
-    const itemsTotal = items.reduce((total, item) => total + (item.price * item.quantity), 0)
+    // Verify items and calculate total from database prices to prevent price tampering
+    // We fetch variants since that's where the actual prices and stock live
+    const variantIds = items.map(item => item.variantId).filter(Boolean) as string[]
+    
+    const variants = await prisma.productVariant.findMany({
+      where: {
+        id: { in: variantIds }
+      },
+      include: {
+        product: true
+      }
+    })
+
+    const itemsTotal = items.reduce((total: number, item: any) => {
+      const variant = variants.find((v: any) => v.id === item.variantId)
+      if (!variant) throw new Error(`Variant not found: ${item.variantId}`)
+      return total + (variant.price * item.quantity)
+    }, 0)
+
     const totalAmount = itemsTotal + shippingFee
 
     const order = await prisma.order.create({
       data: {
-        user: session?.user?.id ? { connect: { id: session.user.id } } : undefined, // Optional link to user
+        user: session?.user?.id ? { connect: { id: session.user.id } } : undefined,
         name,
         phone,
         address,
@@ -38,11 +57,15 @@ export async function POST(req: Request) {
         paymentStatus: "Pending",
         status: "Pending",
         orderItems: {
-          create: items.map((item) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            price: item.price,
-          })),
+          create: items.map((item: any) => {
+            const variant = variants.find((v: any) => v.id === item.variantId)
+            return {
+              productId: item.productId,
+              variantId: item.variantId,
+              quantity: item.quantity,
+              price: variant?.price || 0, // Enforce DB price
+            }
+          }),
         },
       },
     })

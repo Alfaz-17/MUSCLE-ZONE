@@ -71,9 +71,9 @@ export default function CheckoutPage() {
           phone: formData.phone,
           address: formData.address,
           items: cart.items.map(item => ({
-            productId: item.id,
+            productId: item.productId,
+            variantId: item.id, // In use-cart, 'id' is variantId
             quantity: item.quantity,
-            price: item.price
           }))
         })
       })

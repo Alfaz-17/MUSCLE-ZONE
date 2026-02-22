@@ -21,8 +21,29 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: "MUSCLE ZONE | Premium Supplements",
+  title: "MUSCLE ZONE | Premium Supplements & Fitness Terminal",
   description: "Fuel your gains with premium supplements. Protein, creatine, and pre-workouts — local delivery in Bhavnagar.",
+  openGraph: {
+    title: "MUSCLE ZONE",
+    description: "Bhavnagar's Premier Supplement Terminal",
+    url: "https://musclezone.com",
+    siteName: "Muscle Zone",
+    images: [
+      {
+        url: "/logo.png",
+        width: 800,
+        height: 600,
+      },
+    ],
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MUSCLE ZONE",
+    description: "Premium Supplements in Bhavnagar",
+    images: ["/logo.png"],
+  },
 }
 
 export default function RootLayout({

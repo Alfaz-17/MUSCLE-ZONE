@@ -42,13 +42,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
             Back to Shop
           </Link>
           <span className="text-zinc-300 text-xs">/</span>
-          <span className="text-xs font-black uppercase tracking-widest text-zinc-900">{product.category?.name}</span>
+          <span className="text-xs font-black uppercase tracking-widest text-zinc-900">
+            {product.category?.name || "Product"}
+          </span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Image Gallery */}
           <ProductGallery 
-            images={product.imageUrls?.length > 0 ? product.imageUrls : ["/placeholder.svg"]} 
+            images={product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls : ["/placeholder.svg"]} 
             productName={product.name} 
           />
 

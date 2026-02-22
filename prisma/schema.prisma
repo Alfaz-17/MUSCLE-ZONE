@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  phone     String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  imageUrl  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Product {
+  id           String           @id @default(cuid())
+  name         String
+  description  String?
+  brand        String?
+  categoryId   String
+  imageUrls    String[]         @default([])
+  isBestseller Boolean          @default(false)
+  status       String           @default("ACTIVE")
+  productType  String?
+  price        Float?
+  mrp          Float?
+  stock        Int              @default(0)
+  tax          Float?
+  quantity     String?
+  flavors      String[]         @default([])
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  category     Category         @relation(fields: [categoryId], references: [id])
+  variants     ProductVariant[]
+  OrderItem    OrderItem[]
+}
+
+model ProductVariant {
+  id            String      @id @default(cuid())
+  productId     String
+  quantityLabel String?
+  flavor        String?
+  price         Float
+  mrp           Float?
+  discount      Float?
+  tax           Float?
+  stock         Int         @default(0)
+  sku           String?     @unique
+  product       Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderItems    OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  userId        String?
+  name          String
+  phone         String
+  address       String
+  totalAmount   Float
+  status        String      @default("Pending")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  paymentMethod String      @default("COD")
+  paymentStatus String      @default("Pending")
+  shippingFee   Float       @default(0)
+  trackingId    String?
+  user          User?       @relation(fields: [userId], references: [id])
+  orderItems    OrderItem[]
+}
+
+model OrderItem {
+  id        String          @id @default(cuid())
+  orderId   String
+  productId String?
+  variantId String?
+  quantity  Int
+  price     Float
+  order     Order           @relation(fields: [orderId], references: [id])
+  product   Product?        @relation(fields: [productId], references: [id])
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+}
+
+model HeroBanner {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  link      String   @default("/shop")
+  order     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model AnnouncementBar {
+  id        String   @id @default("announcement-main")
+  text      String
+  isActive  Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}

@@ -1,0 +1,504 @@
+Muscle Zone – E-Commerce PRD (End to End with Login)
+1. Product Overview
+
+Product Name: Muscle Zone
+Type: Local E-Commerce Website
+Location: Bhavnagar
+
+Goals
+
+Sell supplements online
+
+Allow instant ordering
+
+Provide user accounts
+
+Allow guest checkout
+
+Admin product & order management
+
+SEO optimized website
+
+2. User Roles
+2.1 Guest User
+
+Can:
+
+Browse products
+
+Add to cart
+
+Checkout without login
+
+2.2 Registered User
+
+Can:
+
+Login / Register
+
+Save address
+
+View order history
+
+Faster checkout
+
+Loyalty points (future)
+
+2.3 Admin
+
+Can:
+
+Manage products
+
+Manage categories
+
+Manage orders
+
+Update order status
+
+View sales dashboard
+
+3. Authentication System
+3.1 Login Methods
+
+Recommended:
+
+Email + Password (NextAuth Credentials)
+
+Optional later:
+
+Google Login
+
+Phone OTP
+
+3.2 Auth Flow
+Register
+
+Fields:
+
+Name
+
+Email
+
+Phone
+
+Password
+
+Process:
+
+Validate input
+
+Hash password (bcrypt)
+
+Save user
+
+Auto login
+
+Login
+
+Email + Password
+
+Verify password
+
+Create session (NextAuth)
+
+Logout
+
+Destroy session
+
+Protected Routes
+
+User:
+
+/orders
+
+Admin:
+
+/admin/*
+
+Role check required
+
+4. Customer Features
+4.1 Product Browsing
+
+View all products
+
+Filter by category
+
+Search
+
+Bestseller badge
+
+4.2 Product Details
+
+Images
+
+Price
+
+Description
+
+Ingredients
+
+Stock status
+
+4.3 Cart
+
+Add product
+
+Update quantity
+
+Remove item
+
+Show total
+
+Storage:
+
+Zustand + localStorage
+
+4.4 Checkout
+Guest Checkout
+
+Fields:
+
+Name
+
+Phone
+
+Address
+
+Logged-in User
+
+Auto-fill details
+
+Save address
+
+Order Process
+
+Status:
+
+Pending
+
+Confirmed
+
+Out for delivery
+
+Delivered
+
+Cancelled
+
+4.5 User Dashboard
+
+Route:
+/orders
+
+Shows:
+
+Order history
+
+Order status
+
+Order details
+
+5. Admin Features
+5.1 Admin Dashboard
+
+Shows:
+
+Total orders
+
+Today sales
+
+Monthly revenue
+
+Top products
+
+5.2 Product Management
+
+Admin can:
+
+Add product
+
+Edit product
+
+Delete product
+
+Upload image
+
+Set stock
+
+Set bestseller
+
+5.3 Category Management
+
+Add
+
+Edit
+
+Delete
+
+5.4 Order Management
+
+Admin can:
+
+View all orders
+
+Update status
+
+Contact customer
+
+6. Pages (Next.js Routes)
+Public
+
+/
+
+/products
+
+/products/[id]
+
+/cart
+
+/checkout
+
+/login
+
+/register
+
+/about
+
+/contact
+
+User
+
+/orders
+
+Admin
+
+/admin
+
+/admin/products
+
+/admin/orders
+
+/admin/categories
+
+7. Database Schema (Prisma)
+User
+
+id
+
+name
+
+email (unique)
+
+phone
+
+password
+
+role (USER / ADMIN)
+
+createdAt
+
+Category
+
+id
+
+name
+
+Product
+
+id
+
+name
+
+description
+
+price
+
+stock
+
+imageUrl
+
+categoryId
+
+isBestseller
+
+createdAt
+
+Order
+
+id
+
+userId (nullable for guest)
+
+name
+
+phone
+
+address
+
+totalAmount
+
+status
+
+createdAt
+
+OrderItem
+
+id
+
+orderId
+
+productId
+
+quantity
+
+price
+
+8. API Endpoints (Next.js)
+Auth
+
+POST /api/register
+
+POST /api/login (NextAuth)
+
+Products
+
+GET /api/products
+
+GET /api/products/:id
+
+POST /api/products (admin)
+
+PUT /api/products/:id
+
+DELETE /api/products/:id
+
+Categories
+
+GET /api/categories
+
+POST /api/categories
+
+Orders
+
+POST /api/orders
+
+GET /api/orders/user
+
+GET /api/orders (admin)
+
+PUT /api/orders/:id/status
+
+9. Tech Architecture
+
+Frontend + Backend
+Next.js
+
+Database
+Neon PostgreSQL
+
+ORM
+Prisma
+
+Auth
+NextAuth (Credentials)
+
+Styling
+Tailwind
+
+Deployment
+Vercel
+
+Images
+UploadThing / Cloudinary
+
+10. Security
+
+Password hashing (bcrypt)
+
+Admin role middleware
+
+Session protection
+
+Input validation
+
+HTTPS
+
+11. SEO
+
+Server-side product pages
+
+Meta tags
+
+Keywords:
+
+Supplement store Bhavnagar
+
+Protein shop Bhavnagar
+
+12. Development Phases
+Phase 1
+
+Database setup
+
+Auth (Register/Login)
+
+Product listing
+
+Product details
+
+Phase 2
+
+Cart
+
+Checkout (guest + user)
+
+Order creation
+
+User order history
+
+Phase 3
+
+Admin panel
+
+Product management
+
+Order management
+
+Phase 4
+
+Dashboard analytics
+
+SEO optimization
+
+Deployment
+
+13. Timeline
+
+Week 1
+Auth + Database + Products
+
+Week 2
+Cart + Checkout + Orders
+
+Week 3
+Admin panel
+
+Week 4
+Deploy + SEO
+
+14. Final Outcome
+
+You will have:
+
+Full E-commerce system
+
+Login + Guest checkout
+
+Admin panel
+
+Modern stack (Next.js + Prisma + Neon)
+
+Real business ready
+
+Strong portfolio project

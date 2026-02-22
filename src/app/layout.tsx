@@ -21,6 +21,7 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   title: "MUSCLE ZONE | Premium Supplements & Fitness Terminal",
   description: "Fuel your gains with premium supplements. Protein, creatine, and pre-workouts — local delivery in Bhavnagar.",
   openGraph: {

@@ -1,4 +1,4 @@
-git remote add origin https://github.com/Alfaz-17/MUSCLE-ZONE.gitimport { DefaultSession } from "next-auth"
+import { DefaultSession } from "next-auth"
 
 declare module "next-auth" {
   interface Session {

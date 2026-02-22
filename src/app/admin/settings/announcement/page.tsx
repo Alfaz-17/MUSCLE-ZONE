@@ -1,7 +1,16 @@
 import { prisma } from "@/lib/prisma"
 import { AnnouncementClient } from "./client"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 export default async function AnnouncementPage() {
+  const session = await getServerSession(authOptions)
+
+  if (!session || session.user.role !== "ADMIN") {
+    redirect("/admin/login")
+  }
+
   const announcement = await prisma.announcementBar.findUnique({
     where: { id: "announcement-main" }
   })

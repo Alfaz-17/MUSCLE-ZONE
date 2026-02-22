@@ -1,7 +1,16 @@
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { HeroClient } from "./client"
 
 export default async function HeroSettingsPage() {
+  const session = await getServerSession(authOptions)
+
+  if (!session || session.user.role !== "ADMIN") {
+    redirect("/admin/login")
+  }
+
   const banners = await prisma.heroBanner.findMany({
     orderBy: { order: "asc" }
   })

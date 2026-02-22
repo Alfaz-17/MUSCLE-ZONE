@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button"
 import { DashboardCards } from "@/components/dashboard-cards"
 import { AdminBadge } from "@/components/ui/admin-badge"
 import Link from "next/link"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 async function getDashboardData() {
   const [orderCount, productCount, userCount, totalRevenue, recentOrders, lowStockProducts] = await Promise.all([

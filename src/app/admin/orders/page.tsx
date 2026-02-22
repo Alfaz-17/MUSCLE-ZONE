@@ -1,7 +1,16 @@
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { OrderClient } from "./client"
 
-export default async function AdminOrdersPage() {
+export default async function OrdersPage() {
+  const session = await getServerSession(authOptions)
+
+  if (!session || session.user.role !== "ADMIN") {
+    redirect("/admin/login")
+  }
+
   const orders = await prisma.order.findMany({
     orderBy: {
       createdAt: "desc",

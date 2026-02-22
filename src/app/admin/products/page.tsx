@@ -1,7 +1,16 @@
 import { prisma } from "@/lib/prisma"
 import { ProductClient } from "./client"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 export default async function ProductsPage() {
+  const session = await getServerSession(authOptions)
+
+  if (!session || session.user.role !== "ADMIN") {
+    redirect("/admin/login")
+  }
+
   const products = await prisma.product.findMany({
     include: {
       category: true,
